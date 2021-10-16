@@ -1,144 +1,114 @@
 
-class Node{
-    private String data;
-    private Node next;
+class User{
+    private String username;    // 사용자 이름
+    private ChatRoom currRoom;  // 현재 참여한 방
+    private boolean isSupervisor;   // 방장인지 아닌지 여부
 
-    public Node(){
-        this.data="";
-        this.next=null;
+    User(){
+        username="";
+        currRoom=null;
+        isSupervisor=false;
     }
 
-    public void setData(String data){
-        this.data=data;
+    public String getUsername() {
+        return username;
     }
 
-    public String getData(){
-        return data;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public void setNext(Node next){
-        this.next=next;
+    public ChatRoom getCurrRoom() {
+        return currRoom;
     }
 
-    public Node getNext(){
-        return next;
+    public void setCurrRoom(ChatRoom currRoom) {
+        this.currRoom = currRoom;
     }
-}
 
-class LinkedList{
-    Node header;
-    Node tail;
+    public boolean isSupervisor() {
+        return isSupervisor;
+    }
 
-    public void add(String data){
-        Node newNode = new Node();
-        newNode.setData(data);
+    public void setSupervisor(boolean supervisor) {
+        isSupervisor = supervisor;
+    }
 
-        if(header == null){
-            header=newNode;
-            tail=newNode;
+    public void createRoom(){
+        if(currRoom==null){
+
         }else{
-            tail.setNext(newNode);
-            tail=newNode;
-        }
-    }
-
-    public void print(){
-        Node currNode = header;
-        while(currNode!=null){
-            System.out.println(currNode.getData());
-            currNode = currNode.getNext();
-        }
-    }
-
-    public boolean contains(String value){
-        Node currNode = header;
-        while(currNode!=null && currNode.getData() != value){
-            currNode = currNode.getNext();
-        }
-        if(currNode==null)
-            return false;
-        return true;
-    }
-
-    public boolean remove(String value){
-        if(header.getNext() == null)
-            return false;
-
-        Node currNode = header;
-        if(currNode.getData() == value){
-            if(header == tail){
-                header=null;
-                tail=null;
-            }else{
-                header=header.getNext();
-            }
-            return true;
-        }
-
-        while(currNode.getNext()!=null && currNode.getNext().getData() != value){
-            currNode = currNode.getNext();
-        }
-
-        if(currNode.getNext()!= null){
-            if(currNode.getNext() == tail){
-                tail=currNode;
-            }
-            currNode.setNext(currNode.getNext().getNext());
-            return true;
-        }
-        return false;
-    }
-
-    public int getSize(){
-        int count = 0;
-        Node currNode = header;
-        while(currNode!=null){
-            count++;
-            currNode = currNode.getNext();
-        }
-        return count;
-    }
-
-    public void removeDuplicates(){
-        Node currNode = header;
-        Node compNode;
-        while(currNode!=null && currNode.getNext()!=null){
-            compNode = currNode;
-
-            while(compNode.getNext() != null){
-                if(currNode.getData() == compNode.getNext().getData()){
-                    compNode.setNext(compNode.getNext().getNext());
-                }else
-                    compNode = compNode.getNext();
-            }
-            currNode = currNode.getNext();
+            System.out.println("참여하고 있는 방이 있습니다.");
         }
     }
 }
 
+class Supervisor extends User{
+
+}
+
+class ChatRoom{
+    private int usernumber; // 유저수
+    private Supervisor leader; //방장
+    private boolean isPublic;   //공개여부
+    private String PW;  // 비공개일 경우 비밀번호 설정
+
+    ChatRoom(){
+        usernumber=1;
+        leader=null;
+        isPublic=true;
+        PW="";
+    }
+
+    public int getUsernumber() {
+        return usernumber;
+    }
+
+    public void setUsernumber(int usernumber) {
+        this.usernumber = usernumber;
+    }
+
+    public Supervisor getLeader() {
+        return leader;
+    }
+
+    public void setLeader(Supervisor leader) {
+        this.leader = leader;
+    }
+
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public void setPublic(boolean aPublic) {
+        isPublic = aPublic;
+    }
+
+    public String getPW() {
+        return PW;
+    }
+
+    public void setPW(String PW) {
+        this.PW = PW;
+    }
+}
 
 public class Main {
 
+    static void minHeightTree(BinarySearchTree tree,int[] arr,int start, int end){
+        int mid = (start+end)/2;
+        BinaryNode node = new BinaryNode();
+        node.setValue(arr[mid]);
+        tree.insert(node);
+        if(start < mid) minHeightTree(tree,arr,start,mid-1);
+        if(end>mid)minHeightTree(tree,arr,mid+1,end);
+    }
+
     public static void main(String[] args) {
-        LinkedList test = new LinkedList();
-        test.add("apple");
-        test.add("banana");
-        test.add("circle");
-        test.add("apple");
-        test.add("apple");
-        test.add("circle");
-        test.add("dirty");
+        BinarySearchTree bst = new BinarySearchTree();
+        int[] arr= new int[]{1,2,3,4,5,6,7};
+        minHeightTree(bst,arr,0,arr.length-1);
 
-        test.print();
-
-        test.removeDuplicates();
-        System.out.println("/////////////////////////////");
-        test.print();
-//
-//        System.out.println(test.getSize());
-
-
-//        System.out.println(test.contains("circle"));
-
+        bst.preorder(bst.getRoot());
     }
 }
